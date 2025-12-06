@@ -1,0 +1,15 @@
+                           
+                                                AWS Provide
+                                        Complete services Include
+                                    1. AWS EC2 Instance
+                                    2. AWS VPC:-
+                                            subnets
+                                            internet gateway
+                                            nat gateway
+                                            nacl
+                                            security group
+                                            route table
+                                            etc.
+                                    3. AWS S3 Bucket
+                                    4. AWS RDS
+                                    .....
