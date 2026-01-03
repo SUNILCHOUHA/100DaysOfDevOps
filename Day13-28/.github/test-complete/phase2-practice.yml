@@ -1,0 +1,90 @@
+# name: phase-2-practice
+
+# on: push
+
+# jobs:
+#   phase2:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checking befor downloading repo 
+#         run: ls -la
+
+#       # - name: checkout repo
+#       #   uses: actions/checkout@v4
+        
+#       # - name: Checking after downloading repo 
+#       #   run: ls -la
+
+#       # - name: checkout .github 
+#       #   run: ls .github/workflows 
+
+#       - name: create file 
+#         run: echo "uploading artifact" > result.txt
+
+#       - name: upload artifact
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: result artifact
+#           path: result.txt
+
+
+# jobs:
+#   build: 
+#     runs-on: ubuntu-latest
+#     steps: 
+#       - name: checkout repo
+#         uses: actions/checkout@v4
+    
+#       - name: verify files
+#         run: ls -la
+  
+#   artifact: 
+#     needs: build
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: create artifact
+#         run: echo "This is my first artifact file in github actions tutorial" > result.txt
+      
+#       - name: upload artifact
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: artifact result
+#           path: result.txt
+
+
+
+#   test: 
+#     needs: artifact
+#     runs-on: ubuntu-latest
+#     steps: 
+#       - name: go to .github/workflows
+#         run: ls .github/workflows
+
+
+
+name: phase2-matrix-build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        node-version: [16, 18, 20]
+
+    steps: 
+      - name: checkout repo
+        uses: actions/checkout@v4
+
+      - name: Use OS 
+        run: echo "Use Operating System ${{ matrix.os }}"
+
+      - name: Use Node.js
+        run: echo "Running on Node ${{ matrix.node-version }}"
+
+
+

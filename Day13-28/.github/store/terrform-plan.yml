@@ -1,0 +1,39 @@
+name: Terraform Plan CI-CD 
+
+on: 
+  push:   
+    branches:
+      - main
+
+jobs:
+  terraform-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+      
+      - name: check file and dir
+        run: |
+          ls -la
+          cd terraform
+          ls -la
+
+
+      
+      # - name: Terraform Setup
+      #   uses: hashicorp/setup-terraform@v3
+
+      # - name: Terraform init
+      #   run: terraform init
+      
+      # - name: Terraform validate
+      #   run: terraform validate
+
+      # - name: terraform plan
+      #   run: terraform plan -out=tfplan
+      
+      # - name: upload artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: terraform-plan
+      #     path: tfplan

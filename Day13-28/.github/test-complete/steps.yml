@@ -1,0 +1,41 @@
+
+# # on:
+# #   push:
+# #   workflow_dispatch:
+
+# # jobs:
+# #   step_test:
+# #     runs-on: ubuntu-latest
+# #     steps:  
+# #       - name: step-1 
+# #         run: echo "step 1 started"
+
+# #       - name: step-2  
+# #         run: echo "step 2 running"
+      
+# #       - name: step 3  
+# #         run: uname -a
+
+# #       - name: failed step
+# #         run: hello this is failed 
+
+
+
+
+# name: phase-2-ci
+
+# on: push
+
+# jobs: 
+#   ci-job: 
+#     runs-on: ubuntu-latest
+
+#     steps: 
+#     #   - name: Checking repository
+#     #     uses: actions/checkout@v4
+
+#       - name: print current directory
+#         run: pwd
+
+#       - name: list files
+#         run: ls -a

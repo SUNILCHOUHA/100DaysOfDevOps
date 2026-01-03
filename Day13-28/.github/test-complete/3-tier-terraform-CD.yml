@@ -1,0 +1,147 @@
+name: 3-Tier-Terraform-CD
+on: 
+  workflow_dispatch:
+jobs:
+  deploy-dev:
+    runs-on: ubuntu-latest
+    environment: dev
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      # - name: Download artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: tfplan-dev
+      #     path: terraform2/modules
+
+      - name: Terraform Setup
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::954976311612:role/CI-CD_Terraform
+          aws-region: us-east-1
+      
+      - name: Terraform Init 
+        working-directory: terraform2/modules
+        run: terraform init
+
+      - name: Terraform create & select workspace
+        working-directory: terraform2/modules
+        run: |
+          terraform workspace select dev || terraform workspace new dev
+        
+      - name: Terraform Plan
+        working-directory: terraform2/modules
+        run: terraform plan 
+
+      - name: Terraform apply
+        working-directory: terraform2/modules
+        run: terraform apply -auto-approve 
+
+      - name: Terraform + CD/CD
+        run: echo "Bhummmmmm! Terraform + CI/CD, Dev Successfully Worked."
+
+    
+
+
+  deploy-stg:
+    needs: deploy-dev
+    runs-on: ubuntu-latest
+    environment: stg
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      # - name: Download artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: tfplan-stg
+      #     path: terraform2/modules
+
+      - name: Terraform Setup
+        uses: hashicorp/setup-terraform@v3
+      
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::954976311612:role/CI-CD_Terraform
+          aws-region: us-east-1
+      
+      - name: Terraform Init 
+        working-directory: terraform2/modules
+        run: terraform init
+
+      - name: Terraform create & select workspace
+        working-directory: terraform2/modules
+        run: |
+          terraform workspace select stg || terraform workspace new stg
+
+      - name: Terraform Plan
+        working-directory: terraform2/modules
+        run: terraform plan 
+
+      - name: Terraform apply
+        working-directory: terraform2/modules
+        run: terraform apply -auto-approve 
+
+      - name: Terraform + CD/CD
+        run: echo "Bhummmmmm! Terraform + CI/CD, Staging Successfully Worked."
+
+
+
+  deploy-prod:
+    needs: deploy-stg
+    runs-on: ubuntu-latest
+    environment: prod
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      # - name: Download artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: tfplan-prod
+      #     path: terraform2/modules
+
+      - name: Terraform Setup
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::954976311612:role/CI-CD_Terraform
+          aws-region: us-east-1
+      
+      - name: Terraform Init 
+        working-directory: terraform2/modules
+        run: terraform init
+
+      - name: Terraform create & select workspace
+        working-directory: terraform2/modules
+        run: |
+          terraform workspace select prod || terraform workspace new prod
+        
+      - name: Terraform Plan
+        working-directory: terraform2/modules
+        run: terraform plan 
+
+      - name: Terraform apply
+        working-directory: terraform2/modules
+        run: terraform apply -auto-approve 
+      - name: Terraform + CD/CD
+        run: echo "Bhummmmmm! Terraform + CI/CD, Production Successfully Worked."
+
+    
+

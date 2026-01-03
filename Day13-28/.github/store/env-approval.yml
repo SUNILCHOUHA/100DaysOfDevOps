@@ -1,0 +1,40 @@
+name: deploy with approval
+
+on:
+  push:
+    branches:
+      - main 
+
+
+jobs:
+  dev-deploy:
+    environment: Dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Dev stage
+        run: |
+          echo "This is first step"
+          echo "Dev stage successfull"
+
+  stg-deploy:
+    needs: Dev-deploy
+    environment: Stg
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Stg stage
+        run: |
+          echo "Stg stage successfull"
+          
+  prod-deploy:
+    needs: Stg-deploy
+    if: |
+      success () && 
+      github.ref == 'refs/heads/main'
+    environment: Prod
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Prod stage
+        run: |
+          echo "Prod successfull"
+
+

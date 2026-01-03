@@ -1,0 +1,38 @@
+name: artifact-demo
+
+on: 
+  push:
+    branches:
+      - main
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo 
+        uses: actions/checkout@v4
+
+      - name: Build Output
+        run: |
+          mkdir dist
+          cp app/hello.txt dist/
+          echo "Build time: $(date)" >> dist/hello.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-upload
+          path: dist/
+
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps: 
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-upload
+      
+      - name: Use artifact
+        run: cat hello.txt
